@@ -1,0 +1,83 @@
+{% extends 'myadmin/public/base.html' %}
+
+{% block title %}
+<title>添加会员</title>
+{% endblock %}
+
+{% block header %}
+<div class="container-fluid am-cf">
+    <div class="row">
+        <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
+            <div class="page-header-heading"><span class="am-icon-user page-header-heading-icon"></span> 添加会员 <small>Amaze UI</small></div>
+            <p class="page-header-description"></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block con %}
+<div class="row">
+    <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
+         <div class="widget am-cf">
+            <div class="widget-body am-fr">
+                <form class="am-form tpl-form-border-form tpl-form-border-br" method="post" enctype="multipart/form-data" action="{% url 'myadmin_user_add' %}">
+                    {% csrf_token %}
+                    <div class="am-form-group">
+                        <label for="user-name" class="am-u-sm-3 am-form-label">用户名：</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" name="username" class="tpl-form-input" required minlength="2" maxlength="20" id="user-name" placeholder="username">
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="user-name" class="am-u-sm-3 am-form-label">密码：</label>
+                        <div class="am-u-sm-9">
+                            <input type="password" name="password" class="tpl-form-input" required placeholder="password">
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="user-name" class="am-u-sm-3 am-form-label">邮箱：</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" name="email" class="tpl-form-input" required id="user-email" placeholder="email">
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="user-name" class="am-u-sm-3 am-form-label">手机：</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" name="phone" class="tpl-form-input" required id="user-phone" placeholder="phone">
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="user-name" class="am-u-sm-3 am-form-label">年龄：</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" name="age" class="tpl-form-input" required id="user-age" placeholder="age">
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="user-name" class="am-u-sm-3 am-form-label">性别：</label>
+                        <div class="am-u-sm-9">
+                            <label class="am-radio-inline"><input type="radio" name="sex" value="男" class="tpl-form-input" checked placeholder="age">男</label>
+                            <label class="am-radio-inline"><input type="radio" name="sex" value="女" class="tpl-form-input" placeholder="age">女</label>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="user-weibo" class="am-u-sm-3 am-form-label">上传头像：</label>
+                        <div class="am-u-sm-9">
+                            <div class="am-form-group am-form-file">
+                                <button type="button" class="am-btn am-btn-danger am-btn-sm">
+<i class="am-icon-cloud-upload"></i> 添加头像</button>
+                                <input id="doc-form-file" type="file" multiple="" name="pic">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <div class="am-u-sm-9 am-u-sm-push-3">
+                            <button class="am-btn am-btn-primary tpl-btn-bg-color-success ">提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
