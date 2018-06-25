@@ -23,7 +23,7 @@ def Page(count,request):
     else:
         s+='<li><a href="?p='+str(p-1)+u+'"><</a></li>'
     for i in range(a,a+10):
-        if a>0:
+        if i>0:
             if i == p:
                 s+='<li class="am-active"><a href="?p='+str(i)+u+'">'+str(i)+'</a></li>'
             else:

@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from . views import views,userviews,typeviews
+from . views import views,userviews,typeviews,goodsviews
 
 urlpatterns = [
     url(r'^$', views.index,name='myadmin_index'),
@@ -12,4 +12,9 @@ urlpatterns = [
     url(r'^type/list/$', typeviews.list,name='myadmin_type_list'),
     url(r'^type/edit/$', typeviews.edit,name='myadmin_type_edit'),
     url(r'^type/delete/$', typeviews.delete,name='myadmin_type_delete'),
+
+    url(r'^goods/add/$', goodsviews.add,name='myadmin_goods_add'),
+    url(r'^goods/list/$', goodsviews.list,name='myadmin_goods_list'),
+    url(r'^goods/edit/$', goodsviews.edit,name='myadmin_goods_edit'),
+    url(r'^goods/delete/$', goodsviews.delete,name='myadmin_goods_delete'),
 ]

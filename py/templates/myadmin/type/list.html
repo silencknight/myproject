@@ -41,11 +41,8 @@
                             <div class="am-form-group tpl-table-list-select">
                                 <select name="type" data-am-selected="{btnSize: 'sm'}" style="display: none;">
                                   <option value="all"{% if request.GET.type == 'all'%}selected{% endif %}>所有条件</option>
-                                  <option value="username"{% if request.GET.type == 'username'%}selected{% endif %}>用户名</option>
-                                  <option value="email"{% if request.GET.type == 'email'%}selected{% endif %}>邮箱</option>
-                                  <option value="phone"{% if request.GET.type == 'phone'%}selected{% endif %}>手机号</option>
-                                  <option value="age"{% if request.GET.type == 'age'%}selected{% endif %}>年龄</option>
-                                  <option value="sex"{% if request.GET.type == 'sex'%}selected{% endif %}>性别</option>
+                                  <option value="typename"{% if request.GET.type == 'username'%}selected{% endif %}>分类名</option>
+                                  <option value="pid"{% if request.GET.type == 'email'%}selected{% endif %}>所属分类</option>
                                 </select>
                             </div>
                         </div>
@@ -93,6 +90,12 @@
                         </table>
                     </div>
                     <div class="am-u-lg-12 am-cf">
+                        <div class="am-fr">
+                            <ul class="am-pagination tpl-pagination">
+                                {% load page %}
+                                {% Page typelist.paginator.num_pages request %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -104,7 +107,11 @@
         a = $(this)
         id = a.parents('tr').find('td:eq(0)').text()
         $.get('{% url "myadmin_type_delete" %}',{id:id},function(data){
-            console.log(id)
+            alert(data.msg)
+            // console.log(!data.del)
+            if (!data.del){
+                a.parents('tr').remove()
+            }
         },'Json')
     })
 </script>
