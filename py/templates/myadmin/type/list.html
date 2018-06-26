@@ -41,8 +41,8 @@
                             <div class="am-form-group tpl-table-list-select">
                                 <select name="type" data-am-selected="{btnSize: 'sm'}" style="display: none;">
                                   <option value="all"{% if request.GET.type == 'all'%}selected{% endif %}>所有条件</option>
-                                  <option value="typename"{% if request.GET.type == 'username'%}selected{% endif %}>分类名</option>
-                                  <option value="pid"{% if request.GET.type == 'email'%}selected{% endif %}>所属分类</option>
+                                  <option value="typename"{% if request.GET.type == 'typename'%}selected{% endif %}>分类名</option>
+                                  <option value="pid"{% if request.GET.type == 'pid'%}selected{% endif %}>所属分类</option>
                                 </select>
                             </div>
                         </div>

@@ -3,10 +3,10 @@ from django.db import models
 # Create your models here.
 
 class Users(models.Model):
-    username = models.CharField(max_length=30)
+    username = models.CharField(max_length=30,unique=True)
     password = models.CharField(max_length=80)
     email = models.CharField(max_length=50)
-    phone = models.CharField(max_length=11)
+    phone = models.CharField(max_length=11,null=True)
     age = models.IntegerField(null=True)
     sex = models.CharField(max_length=1,null=True)
     pic = models.CharField(max_length=50,null=True)

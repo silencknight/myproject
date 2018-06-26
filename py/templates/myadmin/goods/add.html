@@ -20,7 +20,7 @@
 <script type="text/javascript" src="/static/myadmin/js/bootstrap-fileinput.js"></script>
 <div class="row">
     <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
-         <div class="widget am-cf">
+        <div class="widget am-cf">
             <div class="widget-body am-fr">
                 <form class="am-form tpl-form-border-form tpl-form-border-br" method="post" enctype="multipart/form-data" action="">
                     {% csrf_token %}
@@ -29,11 +29,10 @@
                         <div class="am-u-sm-9">
                             <select name="typeid" data-am-selected="{btnSize: 'sm'}" style="display: none;">
                               {% for i in typelist %}
-                                  {% if i.pid == 0 %}
-                                  <option disabled="">{{i.typename}}</option>
-                                  {%else%}
-                                  <option value="{{i.id}}">{{i.typename}}</option>
-                                  {%endif%}
+                                <option 
+                                  {% if i.pid == 0 %}disabled{%endif%}
+                                  value="{{i.id}}">{{i.typename}}</option>
+                                  
                               {%endfor%}
                             </select>
                         </div>
@@ -47,26 +46,26 @@
                     <div class="am-form-group">
                         <label for="user-name" class="am-u-sm-3 am-form-label">商品描述：</label>
                         <div class="am-u-sm-9">
-                            <input type="text" name="descr" class="tpl-form-input"  placeholder="username">
+                            <input type="text" name="descr" class="tpl-form-input" placeholder="username">
                         </div>
                     </div>
                     <div class="am-form-group">
                         <label for="user-name" class="am-u-sm-3 am-form-label">商品价格：</label>
                         <div class="am-u-sm-9">
-                            <input type="text" name="price" class="tpl-form-input"  placeholder="username">
+                            <input type="text" name="price" class="tpl-form-input" placeholder="username">
                         </div>
                     </div>
                     <div class="am-form-group">
                         <label for="user-name" class="am-u-sm-3 am-form-label">商品库存数量：</label>
                         <div class="am-u-sm-9">
-                            <input type="text" name="store" class="tpl-form-input"  placeholder="username">
+                            <input type="text" name="store" class="tpl-form-input" placeholder="username">
                         </div>
                     </div>
                     <div class="am-form-group">
                         <label for="user-weibo" class="am-u-sm-3 am-form-label">上传商品图片 </label>
                        <div class="am-u-sm-9 fileinput fileinput-new" data-provides="fileinput"  id="exampleInputUpload">
                            <div class="tpl-form-file-img fileinput-new thumbnail" >
-                               <img id='picImg'  src="{{ uinfo.pic }}" width="150" />
+                               <img id='picImg'  src="" width="150" />
                            </div>
                            <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
                            <div>
@@ -80,9 +79,27 @@
                        </div>
                     </div>
                     <div class="am-form-group">
-                        <label for="user-name" class="am-u-sm-3 am-form-label">商品详情：</label>
+                        <label for="user-name" class="am-u-sm-3 am-form-label">
+                            商品详情
+                        </label>
                         <div class="am-u-sm-9">
-                            <textarea type="text" name="info" class="tpl-form-input"  placeholder="username"></textarea> 
+                            <link rel="stylesheet" type="text/css" href="/ueditor/UE/third-party/SyntaxHighlighter/shCoreDefault.css">
+                            <script type="text/javascript" src="/ueditor/UE/third-party/SyntaxHighlighter/shCore.js"></script>
+                            <script type="text/javascript" src="/ueditor/UE/ueditor.config.js"></script>
+                            <script type="text/javascript" src="/ueditor/UE/ueditor.all.min.js"></script>
+                            <script type="text/javascript" src="/ueditor/UE/lang/zh-cn/zh-cn.js"></script>
+
+
+                            <script style="color:red" id="editor" name="info" type="text/plain" style="height:500px;">
+                                
+                            </script>
+                       
+
+
+                            <script type="text/javascript">
+                                var ue = UE.getEditor('editor');
+                                SyntaxHighlighter.all();
+                            </script>
                         </div>
                     </div>
                     <div class="am-form-group">

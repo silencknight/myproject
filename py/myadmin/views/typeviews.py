@@ -32,11 +32,11 @@ def list(request):
                 Q(id__contains=keywords)|
                 Q(typename__contains=keywords)|
                 Q(pid__contains=keywords)
-                )
+                ).extra(select={'path':'concat(path,id)'}).order_by('path') 
         elif types == 'typename':
-            ob = Types.objects.filter(typename__contains=keywords)
+            ob = Types.objects.filter(typename__contains=keywords).extra(select={'path':'concat(path,id)'}).order_by('path') 
         elif types == 'pid':
-            ob = Types.objects.filter(pid__contains=keywords)
+            ob = Types.objects.filter(pid__contains=keywords).extra(select={'path':'concat(path,id)'}).order_by('path') 
     else:
         ob = Types.objects.extra(select={'path':'concat(path,id)'}).order_by('path') 
     for i in ob:
@@ -45,7 +45,7 @@ def list(request):
         else:
             i.pname = Types.objects.get(id=i.pid).typename
             num = i.path.count(',')-1
-            i.pname='|---'*num+i.typename
+            i.typename='|---'*num+i.typename
     paginator = Paginator(ob,10)
     p = request.GET.get('p',1)
     ob = paginator.page(p)

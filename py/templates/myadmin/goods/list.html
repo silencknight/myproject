@@ -66,6 +66,7 @@
                                     <th>价格</th>
                                     <th>点击量</th>
                                     <th>所属分类</th>
+                                    <th>状态</th>
                                     <th>操作</th>
                                 </tr>
                             </thead>
@@ -73,7 +74,7 @@
                             {% for i in goodslist %}
                                 <tr>
                                     <td class="am-text-middle">{{ i.id }}</td>
-                                    <td class="am-text-middle">{{ i.goodsname }}</td> 
+                                    <td class="am-text-middle">{{ i.title }}</td> 
                                     <td>
                                         <img src="{{ i.pic }}" class="tpl-table-line-img" width="100px" height="100px" alt="">
                                     </td>
@@ -81,10 +82,15 @@
                                     <td class="am-text-middle">{{ i.price }}</td>
                                     <td class="am-text-middle">{{ i.clicknum }}</td>
                                     <td class="am-text-middle">{{ i.typeid.typename }}</td>
+                                    <td class="am-text-middle">
+                                    {% if i.status == 0 %} 上架
+                                    {% elif i.status == 1 %} 下架
+                                    {% endif %}
+                                    </td>
                                 
                                     <td class="am-text-middle">
                                         <div class="tpl-table-black-operation">
-                                            <a href="{%url 'myadmin_type_edit' %}?tid={{ i.id }}">
+                                            <a href="{%url 'myadmin_goods_edit' %}?gid={{ i.id }}&tid={{i.typeid.typename}}">
                                                 <i class="am-icon-pencil"></i> 编辑
                                             </a>
                                             <a href="javascript:;" class="tpl-table-black-operation-del del">
@@ -114,10 +120,11 @@
     $('.del').click(function(){
         a = $(this)
         id = a.parents('tr').find('td:eq(0)').text()
-        $.get('{% url "myadmin_type_delete" %}',{id:id},function(data){
+        $.get('{% url "myadmin_goods_delete" %}',{id:id},function(data){
+            // console.log(data)
             alert(data.msg)
-            // console.log(!data.del)
-            if (!data.del){
+            console.log(data.del)
+            if (data.del){
                 a.parents('tr').remove()
             }
         },'Json')

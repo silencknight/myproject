@@ -16,17 +16,73 @@
 {% endblock %}
 
 {% block con %}
+<link rel="stylesheet" type="text/css" href="/static/myadmin/css/bootstrap-fileinput.css">
+<script type="text/javascript" src="/static/myadmin/js/bootstrap-fileinput.js"></script>
 <div class="row">
     <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
-         <div class="widget am-cf">
+        <div class="widget am-cf">
             <div class="widget-body am-fr">
-                <form class="am-form tpl-form-border-form tpl-form-border-br" method="post" enctype="multipart/form-data" action="{% url 'myadmin_type_edit' %}?tid={{tinfo.id}}">
+                <form class="am-form tpl-form-border-form tpl-form-border-br" method="post" enctype="multipart/form-data" action="">
                     {% csrf_token %}
                     <div class="am-form-group">
-                        <label for="user-name" class="am-u-sm-3 am-form-label">分类名：</label>
+                        <label for="user-name" class="am-u-sm-3 am-form-label">所属分类：</label>
                         <div class="am-u-sm-9">
-                            <input type="text" name="typename" class="tpl-form-input" required minlength="2" maxlength="30" placeholder="username"
-                            value="{{tinfo.typename}}">
+                            <select name="typeid" data-am-selected="{btnSize: 'sm'}" style="display: none;">
+                              {% for i in typelist %}
+                                <option 
+                                  {% if i.pid == 0 %} disabled{%endif%}
+                                  {% if i.typename == request.GET.tid %} selected{%endif%}
+                                  value="{{i.id}}">{{i.typename}}</option>
+                                  
+                              {%endfor%}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="user-name" class="am-u-sm-3 am-form-label">商品名称：</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" name="title" class="tpl-form-input" placeholder="username" value="{{goodslist.title}}">
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="user-name" class="am-u-sm-3 am-form-label">商品描述：</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" name="descr" class="tpl-form-input" placeholder="username" value="{{goodslist.descr}}">
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="user-name" class="am-u-sm-3 am-form-label">商品价格：</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" name="price" class="tpl-form-input" placeholder="username" value="{{goodslist.price}}">
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="user-name" class="am-u-sm-3 am-form-label">商品库存数量：</label>
+                        <div class="am-u-sm-9">
+                            <input type="text" name="store" class="tpl-form-input" placeholder="username" value="{{goodslist.store}}">
+                        </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="user-weibo" class="am-u-sm-3 am-form-label">上传商品图片 </label>
+                       <div class="am-u-sm-9 fileinput fileinput-new" data-provides="fileinput"  id="exampleInputUpload">
+                           <div class="tpl-form-file-img fileinput-new thumbnail" >
+                               <img id='picImg'  src="{{goodslist.pic}}" width="150" />
+                           </div>
+                           <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
+                           <div>
+                               <span class="btn btn-primary btn-file">
+                                   <span class="fileinput-new am-btn am-btn-danger am-btn-sm">选择文件</span>
+                                   <span class="fileinput-exists am-btn am-btn-danger am-btn-sm">换一张</span>
+                                   <input type="file" name="pic" id="picID" accept="image/gif,image/jpeg,image/x-png"/>
+                               </span>
+                               <a href="javascript:;" class=" fileinput-exists am-btn am-btn-danger am-btn-sm" data-dismiss="fileinput">移除</a>
+                           </div>
+                       </div>
+                    </div>
+                    <div class="am-form-group">
+                        <label for="user-name" class="am-u-sm-3 am-form-label">商品详情：</label>
+                        <div class="am-u-sm-9">
+                            <textarea type="text" name="info" class="tpl-form-input" placeholder="username">{{goodslist.info}}</textarea> 
                         </div>
                     </div>
                     <div class="am-form-group">
