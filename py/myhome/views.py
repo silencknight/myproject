@@ -1,25 +1,36 @@
 from django.shortcuts import render,reverse
 from django.http import HttpResponse
 
-from myadmin.models import Users
+from myadmin.models import Users,Types,Goods
 
 from django.contrib.auth.hashers import make_password, check_password
 
 # Create your views here.
 
 def index(request):
-    return render(request,'myhome/index.html')
+    data = []
+    ob = Types.objects.filter(pid = 0)
+    for i in ob:
+        i.typesub = Types.objects.filter(pid = i.id)
+        for j in i.typesub:
+            j.goodssub = Goods.objects.filter(typeid=j.id)
+            data.append(j)
+            #  i.typesub.goodssub
+    print(data)
+    return render(request,'myhome/index.html',{'tlist':ob,'glist':data})
 
 def login(request):
     if request.method == 'GET':
         return render(request,'myhome/login.html')
     elif request.method == 'POST':
+        if request.POST['vcode'].upper() != request.session['verifycode'].upper():
+            return HttpResponse('<script>alert("验证码错误");history.back(-1)</script>')
         try:
             ob = Users.objects.get(username=request.POST['username'])
             # 检测密码
             res = check_password(request.POST['password'],ob.password)
             if res:
-                print(request.session)
+                # print(request.session)
                 request.session['User']={'uid':ob.id,'username':ob.username}
                 return HttpResponse('<script>alert("登陆成功");location.href="/"</script>')
         except:

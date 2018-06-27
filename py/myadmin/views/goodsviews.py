@@ -1,5 +1,8 @@
 from django.shortcuts import render,reverse
 from django.http import HttpResponse,JsonResponse
+from django.core.paginator import Paginator
+from django.db.models import Q
+
 from . userviews import uploads
 from .. models import Goods,Types
 import os
@@ -25,14 +28,44 @@ def add(request):
             del ob['csrfmiddlewaretoken']
             ob['pic']=pic
             ob['typeid']= Types.objects.get(id=ob['typeid'])
-            print(ob)
+            # print(ob)
             Goods.objects.create(**ob)
             return HttpResponse('<script>alert("添加成功");location.href="'+reverse('myadmin_goods_list')+'"</script>')
         except:
             return HttpResponse('<script>alert("添加失败");location.href="'+reverse('myadmin_goods_add')+'"</script>')
 
 def list(request):
-    ob = Goods.objects.all()
+    types = request.GET.get('type',None)
+    keywords = request.GET.get('keyword',None)
+    if keywords:
+        if types == 'all':
+            if keywords == '上架':
+                status = 0
+            else:
+                status = 1
+            ob = Goods.objects.filter(
+                Q(title__contains=keywords)|
+                Q(id__contains=keywords)|
+                Q(typeid__typename__contains=keywords)|
+                Q(status__contains=status)
+                ).order_by('typeid')
+        elif types == 'id':
+            ob = Goods.objects.filter(id__contains=keywords).order_by('typeid')
+        elif types == 'title':
+            ob = Goods.objects.filter(title__contains=keywords).order_by('title')
+        elif types == 'status':
+            if keywords == '上架':
+                status = 0
+            else:
+                status = 1
+            ob = Goods.objects.filter(status__contains=keywords).order_by('status')
+        elif types == 'typeid':
+            ob = Goods.objects.filter(typeid__typename__contains=keywords).order_by('typeid')
+    else:        
+        ob = Goods.objects.all().order_by('typeid')
+    paginator = Paginator(ob,10)
+    p = request.GET.get('p',1)
+    ob = paginator.page(p)
     return render(request,'myadmin/goods/list.html',{'goodslist':ob})
 
 def edit(request):
@@ -67,11 +100,12 @@ def edit(request):
 def delete(request):
     try:
         id = request.GET.get('id',None)
+        # print(id)
         ob = Goods.objects.get(id=id)
-        if ob.pic:
-            os.remove('.'+ob.pic)
-        ob.delete()
-        return JsonResponse({'msg':'删除成功','del':1})
+        ob.status = (ob.status+1)%2
+        # print(ob.status)
+        ob.save()
+        return JsonResponse({'del':ob.status})
     except:
-        return JsonResponse({'msg':'删除失败','del':0})
+        return JsonResponse({'del':ob.status})
 

@@ -41,8 +41,10 @@
                             <div class="am-form-group tpl-table-list-select">
                                 <select name="type" data-am-selected="{btnSize: 'sm'}" style="display: none;">
                                   <option value="all"{% if request.GET.type == 'all'%}selected{% endif %}>所有条件</option>
-                                  <option value="typename"{% if request.GET.type == 'username'%}selected{% endif %}>分类名</option>
-                                  <option value="pid"{% if request.GET.type == 'email'%}selected{% endif %}>所属分类</option>
+                                  <option value="id"{% if request.GET.type == 'id'%}selected{% endif %}>ID</option>
+                                  <option value="title"{% if request.GET.type == 'title'%}selected{% endif %}>商品名</option>
+                                  <option value="status"{% if request.GET.type == 'status'%}selected{% endif %}>状态</option>
+                                  <option value="typeid"{% if request.GET.type == 'typeid'%}selected{% endif %}>所属分类</option>
                                 </select>
                             </div>
                         </div>
@@ -78,7 +80,7 @@
                                     <td>
                                         <img src="{{ i.pic }}" class="tpl-table-line-img" width="100px" height="100px" alt="">
                                     </td>
-                                    <td class="am-text-middle">{{ i.descr }}</td>
+                                    <td class="am-text-middle">{{ i.descr|truncatechars:15 }}</td>
                                     <td class="am-text-middle">{{ i.price }}</td>
                                     <td class="am-text-middle">{{ i.clicknum }}</td>
                                     <td class="am-text-middle">{{ i.typeid.typename }}</td>
@@ -94,7 +96,10 @@
                                                 <i class="am-icon-pencil"></i> 编辑
                                             </a>
                                             <a href="javascript:;" class="tpl-table-black-operation-del del">
-                                                <i class="am-icon-trash"></i> 删除
+                                                <i class="am-icon-trash"></i> 
+                                                {% if i.status == 1 %} 上架
+                                                {% elif i.status == 0 %} 下架
+                                                {% endif %}
                                             </a>
                                         </div>
                                     </td>
@@ -108,6 +113,8 @@
                     <div class="am-u-lg-12 am-cf">
                         <div class="am-fr">
                             <ul class="am-pagination tpl-pagination">
+                                {% load page %}
+                                {% Page goodslist.paginator.num_pages request %}
                             </ul>
                         </div>
                     </div>
@@ -122,10 +129,15 @@
         id = a.parents('tr').find('td:eq(0)').text()
         $.get('{% url "myadmin_goods_delete" %}',{id:id},function(data){
             // console.log(data)
-            alert(data.msg)
-            console.log(data.del)
+            // console.log(data.del)
             if (data.del){
-                a.parents('tr').remove()
+                alert("下架成功")
+                a.html('<i class="am-icon-trash"></i> 上架').parents('tr').find('td:eq(7)').text('下架')
+                location.href="#"
+            }else{
+                alert("上架成功")
+                a.html('<i class="am-icon-trash"></i> 下架').parents('tr').find('td:eq(7)').text('上架')
+                location.href="#"
             }
         },'Json')
     })

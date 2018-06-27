@@ -80,11 +80,29 @@
                        </div>
                     </div>
                     <div class="am-form-group">
-                        <label for="user-name" class="am-u-sm-3 am-form-label">商品详情：</label>
-                        <div class="am-u-sm-9">
-                            <textarea type="text" name="info" class="tpl-form-input" placeholder="username">{{goodslist.info}}</textarea> 
+                        <label for="user-weibo" class="am-u-sm-3 am-form-label">商品详情</label>
+                        <div class="am-u-sm-9 fileinput fileinput-new" data-provides="fileinput"  id="exampleInputUpload">
+                            <link rel="stylesheet" type="text/css" href="/ueditor/UE/third-party/SyntaxHighlighter/shCoreDefault.css">
+                            <script type="text/javascript" src="/ueditor/UE/third-party/SyntaxHighlighter/shCore.js"></script>
+                            <script type="text/javascript" src="/ueditor/UE/ueditor.config.js"></script>
+                            <script type="text/javascript" src="/ueditor/UE/ueditor.all.min.js"></script>
+                            <script type="text/javascript" src="/ueditor/UE/lang/zh-cn/zh-cn.js"></script>
+                            <script style="color:#000" id="editor" name="info" type="text/plain" style="height:500px;">{{goodslist.info|safe}}
+                                
+                            </script>
+                            <script type="text/javascript">
+                                var ue = UE.getEditor('editor');
+                                SyntaxHighlighter.all();
+                            </script>
                         </div>
                     </div>
+                    <!-- 
+                    <div class="am-form-group">
+                        <label for="user-name" class="am-u-sm-3 am-form-label">商品详情：</label>
+                        <div class="am-u-sm-9">
+                            <textarea type="text" name="info" class="tpl-form-input" placeholder="username"></textarea> 
+                        </div>
+                    </div> -->
                     <div class="am-form-group">
                         <div class="am-u-sm-9 am-u-sm-push-3">
                             <button class="am-btn am-btn-primary tpl-btn-bg-color-success ">提交</button>

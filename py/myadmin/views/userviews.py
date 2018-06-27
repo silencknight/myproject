@@ -113,11 +113,3 @@ def uploads(request):
     d.close()
 
     return "/static/pic/"+filename
-
-# def getone(request):
-#     uid = int(request.GET.get('uid',None))
-#     ob = Users.objects.filter(id__gt=uid)[:1]
-#     for i in ob:
-#         print(i)
-#     data = {'msg':'删除成功','code':uid}
-#     return JsonResponse(data)

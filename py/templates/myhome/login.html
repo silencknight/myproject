@@ -40,6 +40,10 @@
                                     <label for="password"><i class="am-icon-lock"></i></label>
                                     <input type="password" name="password" id="password" placeholder="请输入密码">
                                 </div>
+                                <div style="position: relative;">
+                                    <input type="text" name="vcode" required  placeholder="请输入验证码">
+                                    <img src="{% url 'myhome_vcode' %}" onclick="this.src='/vcode?'+Math.random()" style="position: absolute;top:10px;right:10px">
+                                </div>
                                 <div class="am-cf">
                                     <input type="submit" value="登 录" class="am-btn am-btn-primary am-btn-sm">
                                 </div>

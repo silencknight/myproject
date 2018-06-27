@@ -14,13 +14,11 @@ class Users(models.Model):
     status = models.IntegerField(default=0)
     addtime = models.DateTimeField(auto_now_add=True)
 
-
-
-
 class Types(models.Model):
-    typename = models.CharField(max_length=20,unique=True) 
+    typename = models.CharField(max_length=20) 
     pid = models.IntegerField()
     path = models.CharField(max_length=20)
+    pic = models.CharField(max_length=100,null=True)
 
 
 class Goods(models.Model):

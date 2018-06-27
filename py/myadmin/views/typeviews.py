@@ -3,11 +3,18 @@ from django.http import HttpResponse,JsonResponse
 from django.core.paginator import Paginator
 from django.db.models import Q
 
-from .. models import Types
+from .. models import Types,Goods
 
 def add(request):
     if request.method == 'GET':
-        ob = Types.objects.all()
+        ob = Types.objects.extra(select={'path':'concat(path,id)'}).order_by('path') 
+        for i in ob:
+            if i.pid==0:
+                i.pname='顶级分类'
+            else:
+                i.pname = Types.objects.get(id=i.pid).typename
+                num = i.path.count(',')-1
+                i.typename='|---'*num+i.typename
         return render(request,'myadmin/type/add.html',{'typelist':ob})
     elif request.method == 'POST':
         try:
@@ -33,6 +40,8 @@ def list(request):
                 Q(typename__contains=keywords)|
                 Q(pid__contains=keywords)
                 ).extra(select={'path':'concat(path,id)'}).order_by('path') 
+        elif types == 'id':
+            ob = Types.objects.filter(id__contains=keywords).extra(select={'path':'concat(path,id)'}).order_by('path') 
         elif types == 'typename':
             ob = Types.objects.filter(typename__contains=keywords).extra(select={'path':'concat(path,id)'}).order_by('path') 
         elif types == 'pid':
@@ -49,7 +58,7 @@ def list(request):
     paginator = Paginator(ob,10)
     p = request.GET.get('p',1)
     ob = paginator.page(p)
-    print(paginator.num_pages)
+    # print(paginator.num_pages)
     return render(request,'myadmin/type/list.html',{'typelist':ob})
 
 def edit(request):
@@ -68,8 +77,9 @@ def delete(request):
     id = request.GET['id']
     # print(id)
     flg = Types.objects.filter(pid=id).exists()
-    # print(flg)
-    if not flg:
+    flg2 = Goods.objects.filter(typeid__id=id).exists()
+    # print(flg,flg2)
+    if not (flg or flg2):
         ob = Types.objects.get(id=id)
         # ob2 = Types.objects.filter(id__gt=id).first()
         # print(ob2.id)
@@ -77,5 +87,5 @@ def delete(request):
         msg='删除成功'
     else:
         msg='删除失败'
-    return JsonResponse({'msg':msg,'del':flg})
+    return JsonResponse({'msg':msg,'del':(flg or flg2)})
 

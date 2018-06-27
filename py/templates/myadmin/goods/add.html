@@ -1,14 +1,14 @@
 {% extends 'myadmin/public/base.html' %}
 
 {% block title %}
-<title>添加分类</title>
+<title>添加商品</title>
 {% endblock %}
 
 {% block header %}
 <div class="container-fluid am-cf">
     <div class="row">
         <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
-            <div class="page-header-heading"><span class="am-icon-user page-header-heading-icon"></span> 添加分类 <small>Amaze UI</small></div>
+            <div class="page-header-heading"><span class="am-icon-user page-header-heading-icon"></span> 添加商品 <small>Amaze UI</small></div>
             <p class="page-header-description"></p>
         </div>
     </div>
@@ -79,7 +79,7 @@
                        </div>
                     </div>
                     <div class="am-form-group">
-                        <label for="user-name" class="am-u-sm-3 am-form-label">
+                        <label for="user-intro" class="am-u-sm-3 am-form-label">
                             商品详情
                         </label>
                         <div class="am-u-sm-9">
@@ -88,14 +88,9 @@
                             <script type="text/javascript" src="/ueditor/UE/ueditor.config.js"></script>
                             <script type="text/javascript" src="/ueditor/UE/ueditor.all.min.js"></script>
                             <script type="text/javascript" src="/ueditor/UE/lang/zh-cn/zh-cn.js"></script>
-
-
-                            <script style="color:red" id="editor" name="info" type="text/plain" style="height:500px;">
+                            <script style="color:#000" id="editor" name="info" type="text/plain" style="height:500px;">
                                 
                             </script>
-                       
-
-
                             <script type="text/javascript">
                                 var ue = UE.getEditor('editor');
                                 SyntaxHighlighter.all();
