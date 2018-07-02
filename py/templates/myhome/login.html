@@ -30,7 +30,7 @@
                         <div class="clear"></div>
                         
                         <div class="login-form">
-                            <form method="post">
+                            <form method="post" action="?next={{request.GET.next|default:'/'}}">
                                 {% csrf_token %}
                                 <div class="user-name">
                                     <label for="user"><i class="am-icon-user"></i></label>

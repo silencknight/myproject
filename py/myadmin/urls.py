@@ -1,8 +1,14 @@
 from django.conf.urls import url
-from . views import views,userviews,typeviews,goodsviews
+from . views import views,userviews,typeviews,goodsviews,orderviews,authviews
 
 urlpatterns = [
     url(r'^$', views.index,name='myadmin_index'),
+
+    url(r'^login/$', authviews.mylogin,name='myadmin_login'),
+    url(r'^logout/$', authviews.mylogout,name='myadmin_logout'),
+
+    url(r'^auth/user/add/$', authviews.useradd,name='myadmin_useradd'),
+
     url(r'^user/add/$', userviews.add,name='myadmin_user_add'),
     url(r'^user/list/$', userviews.list,name='myadmin_user_list'),
     url(r'^user/edit/$', userviews.edit,name='myadmin_user_edit'),
@@ -17,4 +23,7 @@ urlpatterns = [
     url(r'^goods/list/$', goodsviews.list,name='myadmin_goods_list'),
     url(r'^goods/edit/$', goodsviews.edit,name='myadmin_goods_edit'),
     url(r'^goods/delete/$', goodsviews.delete,name='myadmin_goods_delete'),
+
+    url(r'^order/$', orderviews.list,name='myadmin_order_list'),
+    url(r'^order/edit/$', orderviews.edit,name='myadmin_order_edit'),
 ]

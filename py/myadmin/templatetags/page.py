@@ -36,3 +36,13 @@ def Page(count,request):
     if p==count: s+=' class="am-disabled"'
     s+='><a href="?p='+str(count)+u+'">>></a></li>'            
     return format_html(s)
+
+@register.simple_tag
+def multi(a,b):
+    res = float(a*b)
+    res = round(res,2)
+    return res
+
+@register.filter
+def pricetwo(a):
+    return a*1.2
