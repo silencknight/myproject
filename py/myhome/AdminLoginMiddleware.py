@@ -15,9 +15,9 @@ class AdminLoginMiddleware:
         # 判断是否要进入后台
         if re.match('/myadmin/',u) and u not in urllist:
             # 判断是否登录
-            if request.session.get('Admin',None):
+            if not request.session.get('_auth_user_id',None):
                 # 否则跳转到登录界面
-                return HttpResponse('<script>alert("请先登录");location.href="/myadmin/login.html"</script>')
+                return HttpResponse('<script>alert("请先登录");location.href="/myadmin/login/"</script>')
 
         urllist = ['/ordercheck/','/newaddress/','/createorder/','/mycenter/','/myorders/','/pay']
         # 判断是否进入了前台需要登录的界面

@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^mycenter/$', views.mycenter,name='myhome_mycenter'),
     url(r'^myorders/$', views.myorders,name='myhome_myorders'),
     url(r'^delorder/$', views.delorder,name='myhome_delorder'),
+    url(r'^myinfo/$', views.myinfo,name='myhome_myinfo'),
     url(r'^pay/$', views.pay,name='myhome_pay'),
     url(r'^sesset/$', views.set,name='myhome_set'),
     url(r'^sesget/$', views.get,name='myhome_get'),

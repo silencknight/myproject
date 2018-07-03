@@ -2,6 +2,7 @@ from django.shortcuts import render,reverse
 from django.http import HttpResponse,JsonResponse
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.contrib.auth.decorators import permission_required
 
 from . userviews import uploads
 from .. models import Goods,Types
@@ -9,6 +10,7 @@ import os
 
 # Create your views here.
 
+@permission_required('myadmin.insert_goods',raise_exception=True)
 def add(request):
     if request.method=='GET':
         ob = Types.objects.extra(select={'path':'concat(path,id)'}).order_by('path')
@@ -34,6 +36,7 @@ def add(request):
         except:
             return HttpResponse('<script>alert("添加失败");location.href="'+reverse('myadmin_goods_add')+'"</script>')
 
+@permission_required('myadmin.show_goods',raise_exception=True)
 def list(request):
     types = request.GET.get('type',None)
     keywords = request.GET.get('keyword',None)
@@ -68,6 +71,7 @@ def list(request):
     ob = paginator.page(p)
     return render(request,'myadmin/goods/list.html',{'goodslist':ob})
 
+@permission_required('myadmin.insert_edit',raise_exception=True)
 def edit(request):
     id = request.GET['gid']
     gb = Goods.objects.get(id=id)
@@ -97,6 +101,7 @@ def edit(request):
         except:
             return HttpResponse('<script>alert("修改失败");location.href="'+reverse("myadmin_goods_edit")+'?gid='+str(gb.id)+'&tid='+request.GET['tid']+'"</script>')
 
+@permission_required('myadmin.del_goods',raise_exception=True)
 def delete(request):
     try:
         id = request.GET.get('id',None)

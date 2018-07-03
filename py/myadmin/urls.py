@@ -7,7 +7,14 @@ urlpatterns = [
     url(r'^login/$', authviews.mylogin,name='myadmin_login'),
     url(r'^logout/$', authviews.mylogout,name='myadmin_logout'),
 
-    url(r'^auth/user/add/$', authviews.useradd,name='myadmin_useradd'),
+    url(r'^auth/user/add/$', authviews.useradd,name='auth_user_add'),
+    url(r'^auth/user/list/$', authviews.userlist,name='auth_user_list'),
+    url(r'^auth/user/edit/$', authviews.useredit,name='auth_user_edit'),
+    url(r'^auth/user/delete/$', authviews.userdelete,name='auth_user_delete'),
+
+    url(r'^auth/group/add/$', authviews.groupadd,name='auth_group_add'),
+    url(r'^auth/group/list/$', authviews.grouplist,name='auth_group_list'),
+    url(r'^auth/group/edit/$', authviews.groupedit,name='auth_group_edit'),
 
     url(r'^user/add/$', userviews.add,name='myadmin_user_add'),
     url(r'^user/list/$', userviews.list,name='myadmin_user_list'),

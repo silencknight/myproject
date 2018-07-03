@@ -1,14 +1,14 @@
 {% extends 'myadmin/public/base.html' %}
 
 {% block title %}
-<title>修改会员信息</title>
+<title>修改权限组信息</title>
 {% endblock %}
 
 {% block header %}
 <div class="container-fluid am-cf">
     <div class="row">
         <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
-            <div class="page-header-heading"><span class="am-icon-user page-header-heading-icon"></span> 修改会员信息 <small>Amaze UI</small></div>
+            <div class="page-header-heading"><span class="am-icon-user page-header-heading-icon"></span> 修改权限组信息 <small>Amaze UI</small></div>
             <p class="page-header-description"></p>
         </div>
     </div>
@@ -20,53 +20,65 @@
     <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
          <div class="widget am-cf">
             <div class="widget-body am-fr">
-                <form class="am-form tpl-form-border-form tpl-form-border-br" method="post" enctype="multipart/form-data" action="{% url 'myadmin_user_edit' %}?uid={{uinfo.id}}">
+                <form id="myform" class="am-form tpl-form-border-form tpl-form-border-br" method="post" enctype="multipart/form-data" action="{% url 'auth_group_edit' %}?id={{group.id}}">
                     {% csrf_token %}
                     <div class="am-form-group">
-                        <label for="user-name" class="am-u-sm-3 am-form-label">用户名：</label>
+                        <label for="user-name" class="am-u-sm-3 am-form-label">组名：</label>
                         <div class="am-u-sm-9">
-                            <input type="text" name="username" class="tpl-form-input" required minlength="2" maxlength="20" id="user-name" placeholder="username" value="{{uinfo.username}}">
+                            <input type="text" name="name" class="tpl-form-input" required minlength="2" maxlength="20" id="user-name" placeholder="username" value="{{group.name}}">
                         </div>
                     </div>
                     <div class="am-form-group">
-                        <label for="user-name" class="am-u-sm-3 am-form-label">邮箱：</label>
+                        <label for="user-name" class="am-u-sm-3 am-form-label">权限：</label>
                         <div class="am-u-sm-9">
-                            <input type="text" name="email" class="tpl-form-input" required id="user-email" placeholder="email" value="{{uinfo.email}}">
-                        </div>
-                    </div>
-                    <div class="am-form-group">
-                        <label for="user-name" class="am-u-sm-3 am-form-label">手机：</label>
-                        <div class="am-u-sm-9">
-                            <input type="text" name="phone" class="tpl-form-input" required id="user-phone" placeholder="phone" value="{{uinfo.phone}}">
-                        </div>
-                    </div>
-                    <div class="am-form-group">
-                        <label for="user-name" class="am-u-sm-3 am-form-label">年龄：</label>
-                        <div class="am-u-sm-9">
-                            <input type="text" name="age" class="tpl-form-input" required id="user-age" placeholder="age" value="{{uinfo.age}}">
-                        </div>
-                    </div>
-                    <div class="am-form-group">
-                        <label for="user-name" class="am-u-sm-3 am-form-label">性别：</label>
-                        <div class="am-u-sm-9">
-                            <label class="am-radio-inline"><input type="radio" name="sex" value="男" class="tpl-form-input" checked placeholder="age" {%if uinfo.sex == '男'%}checked{%endif%}>男</label>
-                            <label class="am-radio-inline"><input type="radio" name="sex" value="女" class="tpl-form-input" placeholder="age" {%if uinfo.sex == '女'%}checked{%endif%}>女</label>
-                        </div>
-                    </div>
-                    <div class="am-form-group">
-                        <label for="user-weibo" class="am-u-sm-3 am-form-label">上传头像：</label>
-                        <div class="am-u-sm-9">
-                            <div class="tpl-form-file-img">
-                                <img src="{{ uinfo.pic }}" width="150">
+                            <div style="float: left;text-align: center;">
+                                <p>可用权限</p>
+                                <select id="select1" multiple="multiple" style="width:300px;height:200px; float:left; border:1px solid rgba(255, 255, 255, 0.2); padding:4px; ">
+                                    {% for i in perms %}
+                                    <option value="{{i.id}}">{{i.name}}</option>
+                                    {% endfor %}
+                                </select>
+                                <p><button id="add_all" class="am-btn am-btn-warning am-btn-xs" type="button">全选</button></p>
                             </div>
-                            <br>
-                            <div class="am-form-group am-form-file">
-                                <button type="button" class="am-btn am-btn-danger am-btn-sm">
-<i class="am-icon-cloud-upload"></i> 添加头像</button>
-                                <input id="doc-form-file" type="file" multiple="" name="pic" accept="image/gif,image/jpeg,image/x-png">
+                            <div  style="float: left;width: 50px;height:200px;">
+                                <ul style="margin-top: 100px;text-align: center;">
+                                    <li><button  id="add" class="am-btn am-btn-warning am-btn-xs" type="button">>></button></li>
+                                    <li><button  id="remove" class="am-btn am-btn-warning am-btn-xs" type="button"><<</button></li>
+                                </ul>
                             </div>
-
+                            <div style="float: left;text-align: center;">
+                                <p>已选权限</p>
+                                <select id="select2" name="prms" multiple="multiple" style="width:300px;height:200px; float:left; border:1px solid rgba(255, 255, 255, 0.2); padding:4px; ">
+                                    {% for i in group.permissions.all %}
+                                    <option value="{{i.id}}">{{i.name}}</option>
+                                    {% endfor %}
+                                </select>
+                                <p><button id="remove_all" class="am-btn am-btn-warning am-btn-xs" type="button">全部移除</button></p>
+                            </div>
                         </div>
+                        <script type="text/javascript">
+                            $('#add').click(function(){
+                                $('#select1 option:selected').appendTo('#select2')
+                            })
+                            $('#remove').click(function(){
+                                $('#select2 option:selected').appendTo('#select1')
+                            })
+                            $('#add_all').click(function(){
+                                $('#select1 option').appendTo('#select2')
+                            })
+                            $('#remove_all').click(function(){
+                                $('#select2 option').appendTo('#select1')
+                            })
+                            $('#select1').dblclick(function(){
+                                $('option:selected').appendTo('#select2')
+                            })
+                            $('#select2').dblclick(function(){
+                                $('option:selected').appendTo('#select1')
+                            })
+                            $('#myform').submit(function(){
+                                $('#select2 option').prop('selected',true)
+                            })
+                        </script>
                     </div>
                     <div class="am-form-group">
                         <div class="am-u-sm-9 am-u-sm-push-3">

@@ -273,14 +273,21 @@ def mycenter(request):
     return render(request,'myhome/center/index.html') 
 
 def myorders(request):
-    data = Orders.objects.filter(uid=request.session['User']['uid'])
+    data = Orders.objects.filter(uid=request.session['User']['uid']).exclude(status=-1)
 
     context = {'orderlist':data}
     return render(request,'myhome/center/myorders.html',context) 
 
 def delorder(request):
     oid = request.GET['oid']
-    return HttpResponse(oid)
+    data = Orders.objects.get(id = oid)
+    print(data.status)
+    data.status = -1
+    data.save()
+    return HttpResponse('删除成功')
+
+def myinfo(request):
+    return render(request,'myhome/center/info.html',{})
 
 def set(request):
     request.session['abc'] ='aabbcc'

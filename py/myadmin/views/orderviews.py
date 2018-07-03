@@ -2,9 +2,11 @@ from django.shortcuts import render,reverse
 from django.http import HttpResponse,JsonResponse
 from django.core.paginator import Paginator
 from .. models import Orders,OrderInfo,Users
+from django.contrib.auth.decorators import permission_required
 
 # Create your views here.
 
+@permission_required('myadmin.show_order',raise_exception=True)
 def list(request):
     data = Orders.objects.all()
     for i in data:
@@ -14,6 +16,7 @@ def list(request):
     data = paginator.page(p)
     return render(request,'myadmin/order/list.html',{'olist':data})
 
+@permission_required('myadmin.edit_order',raise_exception=True)
 def edit(request):
     oid = request.GET['oid']
     if request.method == 'GET':

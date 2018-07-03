@@ -1,14 +1,14 @@
 {% extends 'myadmin/public/base.html' %}
 
 {% block title %}
-<title>管理员添加</title>
+<title>管理组添加</title>
 {% endblock %}
 
 {% block header %}
 <div class="container-fluid am-cf">
     <div class="row">
         <div class="am-u-sm-12 am-u-md-12 am-u-lg-9">
-            <div class="page-header-heading"><span class="am-icon-user page-header-heading-icon"></span> 管理员添加 <small>Amaze UI</small></div>
+            <div class="page-header-heading"><span class="am-icon-user page-header-heading-icon"></span> 管理组添加 <small>Amaze UI</small></div>
             <p class="page-header-description"></p>
         </div>
     </div>
@@ -20,25 +20,62 @@
     <div class="am-u-sm-12 am-u-md-12 am-u-lg-12">
          <div class="widget am-cf">
             <div class="widget-body am-fr">
-                <form class="am-form tpl-form-border-form tpl-form-border-br" method="post" enctype="multipart/form-data" action="{% url 'myadmin_user_add' %}">
+                <form class="am-form tpl-form-border-form tpl-form-border-br" method="post" enctype="multipart/form-data" id="myform">
                     {% csrf_token %}
                     <div class="am-form-group">
-                        <label for="user-name" class="am-u-sm-3 am-form-label">用户名：</label>
+                        <label for="user-name" class="am-u-sm-3 am-form-label">组名：</label>
                         <div class="am-u-sm-9">
-                            <input type="text" name="username" class="tpl-form-input" required minlength="2" maxlength="20" id="user-name" placeholder="username">
+                            <input type="text" name="name" class="tpl-form-input" required minlength="2" maxlength="20" id="user-name" placeholder="username">
                         </div>
                     </div>
                     <div class="am-form-group">
-                        <label for="user-name" class="am-u-sm-3 am-form-label">密码：</label>
+                        <label for="user-name" class="am-u-sm-3 am-form-label">权限：</label>
                         <div class="am-u-sm-9">
-                            <input type="password" name="password" class="tpl-form-input" required placeholder="password">
+                            <div style="float: left;text-align: center;">
+                                <p>可用权限</p>
+                                <select id="select1" multiple="multiple" style="width:300px;height:200px; float:left; border:1px solid rgba(255, 255, 255, 0.2); padding:4px; ">
+                                    {% for i in perms %}
+                                    <option value="{{i.id}}">{{i.name}}</option>
+                                    {% endfor %}
+                                </select>
+                                <p><button id="add_all" class="am-btn am-btn-warning am-btn-xs" type="button">全选</button></p>
+                            </div>
+                            <div  style="float: left;width: 50px;height:200px;">
+                                <ul style="margin-top: 100px;text-align: center;">
+                                    <li><button  id="add" class="am-btn am-btn-warning am-btn-xs" type="button">>></button></li>
+                                    <li><button  id="remove" class="am-btn am-btn-warning am-btn-xs" type="button"><<</button></li>
+                                </ul>
+                            </div>
+                            <div style="float: left;text-align: center;">
+                                <p>已选权限</p>
+                                <select id="select2" name="prms" multiple="multiple" style="width:300px;height:200px; float:left; border:1px solid rgba(255, 255, 255, 0.2); padding:4px; ">
+                                </select>
+                                <p><button id="remove_all" class="am-btn am-btn-warning am-btn-xs" type="button">全部移除</button></p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="am-form-group">
-                        <label for="user-name" class="am-u-sm-3 am-form-label">邮箱：</label>
-                        <div class="am-u-sm-9">
-                            <input type="text" name="email" class="tpl-form-input" required id="user-email" placeholder="email">
-                        </div>
+                        <script type="text/javascript">
+                            $('#add').click(function(){
+                                $('#select1 option:selected').appendTo('#select2')
+                            })
+                            $('#remove').click(function(){
+                                $('#select2 option:selected').appendTo('#select1')
+                            })
+                            $('#add_all').click(function(){
+                                $('#select1 option').appendTo('#select2')
+                            })
+                            $('#remove_all').click(function(){
+                                $('#select2 option').appendTo('#select1')
+                            })
+                            $('#select1').dblclick(function(){
+                                $('option:selected').appendTo('#select2')
+                            })
+                            $('#select2').dblclick(function(){
+                                $('option:selected').appendTo('#select1')
+                            })
+                            $('#myform').submit(function(){
+                                $('#select2 option').prop('selected',true)
+                            })
+                        </script>
                     </div>
                     <div class="am-form-group">
                         <div class="am-u-sm-9 am-u-sm-push-3">
