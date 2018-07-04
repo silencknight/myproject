@@ -70,7 +70,7 @@
                         {% for i in tlist %}
                         <li class="appliance js_toggle relative first">
                             <div class="category-info">
-                                <h3 class="category-name b-category-name"><i><img src="static/myhome/images/cake.png"></i><a class="ml-22" title="点心">{{ i.typename }}</a></h3>
+                                <h3 class="category-name b-category-name"><i><img src="{{ i.pic }}"></i><a class="ml-22" title="{{i.typename}}">{{ i.typename }}</a></h3>
                                 <em>&gt;</em></div>
                             <div class="menu-item menu-in top">
                                 <div class="area-in">
@@ -79,9 +79,9 @@
                                             <div class="sort-side">
                                                 {% for j in i.typesub %}
                                                 <dl class="dl-sort">
-                                                    <dt><a href="{% url 'myhome_list_id' j.id %}"><span title="蛋糕">{{j.typename}}</span></a></dt>
+                                                    <dt><a href="{% url 'myhome_list_id' j.id %}"><span title="{{j.typename}}">{{j.typename}}</span></a></dt>
                                                     {% for k in j.goodssub %}
-                                                    <dd><a title="蒸蛋糕" href="{% url 'myhome_info' k.id%}"><span>{{k.title}}</span></a></dd>
+                                                    <dd><a title="{{k.title}}" href="{% url 'myhome_info' k.id%}"><span>{{k.title}}</span></a></dd>
                                                     {% endfor %}
                                                 </dl>
                                                 {% endfor %}
@@ -128,7 +128,7 @@
                             </div>
                             <i class="am-icon-shopping-basket am-icon-md  seprate"></i>
                         </div>
-                        <a href="#"><img src="{{j.pic}}" style="width:180px;height:180px" /></a>
+                        <a href="{%url 'myhome_info' j.id%}"><img src="{{j.pic}}" style="width:180px;height:180px" /></a>
                     </div>   
                     {%endfor%}               
                 </div>

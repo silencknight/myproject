@@ -8,6 +8,8 @@ from .. models import Users
 import os
 
 # Create your views here.
+
+# 添加用户
 @permission_required('myadmin.insert_users',raise_exception=True)
 def add(request):
     if request.method=='GET':
@@ -29,6 +31,7 @@ def add(request):
         except:
             return HttpResponse('<script>alert("添加失败");location.href="'+reverse('myadmin_user_add')+'"</script>')
 
+# 用户列表
 @permission_required('myadmin.show_users',raise_exception=True)
 def list(request):
     types = request.GET.get('type',None)
@@ -60,6 +63,7 @@ def list(request):
     data = paginator.page(p)
     return render(request,'myadmin/user/list.html',{'userlist':data})
 
+# 修改用户信息
 @permission_required('myadmin.edit_users',raise_exception=True)
 def edit(request):
     id=request.GET.get('uid',None)
@@ -82,6 +86,7 @@ def edit(request):
         except:
             return HttpResponse('<script>alert("修改失败");location.href="'+reverse("myadmin_user_edit")+'?uid='+str(data.id)+'"</script>')
 
+# 删除用户
 @permission_required('myadmin.del_users',raise_exception=True)
 def delete(request):
     try:
@@ -98,7 +103,7 @@ def delete(request):
 
     return JsonResponse(data)
 
-
+# 图片上传
 def uploads(request):
     m = request.FILES.get('pic',None)
     p = m.name.split('.').pop()

@@ -1,10 +1,13 @@
 from django.shortcuts import render,reverse
 from django.http import HttpResponse
+from django.core.paginator import Paginator
 from .. models import Users
 from django.contrib.auth import login,logout,authenticate
 from django.contrib.auth.models import User,Permission,Group
 from django.contrib.auth.decorators import permission_required
 
+
+# 后台用户添加
 @permission_required('add_user',raise_exception=True)
 def useradd(request):
     if request.method == "GET":
@@ -20,13 +23,16 @@ def useradd(request):
         usr.save()
         return HttpResponse('<script>location.href="'+reverse('auth_user_list')+'"</script>')
 
-
+# 后台用户列表
 @permission_required('add_user',raise_exception=True)
 def userlist(request):
     data = User.objects.all()
+    paginator = Paginator(data,10)
+    p = request.GET.get('p',1)
+    data = paginator.page(p)
     return render(request,'myadmin/auth/user/list.html',{'userlist':data})
 
-
+# 后台用户信息修改
 @permission_required('add_user',raise_exception=True)
 def useredit(request):
     user = User.objects.get(id=request.GET['id'])
@@ -48,7 +54,7 @@ def useredit(request):
         except:
             return HttpResponse('<script>location.href="'+reverse('auth_user_edit')+'?id='+str(user.id)+'"</script>')
 
-
+# 后台用户删除
 @permission_required('add_user',raise_exception=True)
 def userdelete(request):
     id = request.GET['id']
@@ -56,7 +62,7 @@ def userdelete(request):
     user.delete()
     return HttpResponse('<script>location.href="'+reverse('auth_user_list')+'"</script>')
 
-
+# 权限组添加
 @permission_required('add_user',raise_exception=True)
 def groupadd(request):
     if request.method == 'GET':
@@ -73,13 +79,18 @@ def groupadd(request):
             g.save()
         return HttpResponse('<script>location.href="'+reverse('auth_group_list')+'"</script>')
 
-
+# 权限组列表
 @permission_required('add_user',raise_exception=True)
 def grouplist(request):
     data = Group.objects.all().exclude(name__istartswith='Can')
+    for i in data:
+        i.count=len(i.user_set.all())
+    paginator = Paginator(data,10)
+    p = request.GET.get('p',1)
+    data = paginator.page(p)
     return render(request,'myadmin/auth/group/list.html',{'group':data})
 
-
+# 权限组修改
 @permission_required('add_user',raise_exception=True)
 def groupedit(request):
     gid = request.GET['id']
@@ -97,7 +108,7 @@ def groupedit(request):
         data.save()
         return HttpResponse('<script>location.href="'+reverse('auth_group_list')+'"</script>')
 
-
+# 后台登录
 def mylogin(request):
     if request.method == 'GET':
         return render(request,'myadmin/login.html')
@@ -115,7 +126,7 @@ def mylogin(request):
 
         return HttpResponse('<script>alert("用户名或密码错误");location.href="/myadmin/login/"</script>')
 
-
+# 后台登出
 def mylogout(request):
     logout(request)
     return HttpResponse('<script>alert("退出登录");location.href="/myadmin/login/"</script>')

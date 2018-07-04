@@ -56,7 +56,7 @@
                         </li>
                         <li class="td td-item">
                             <div class="item-pic">
-                                <a href="#" target="_blank" data-title="美康粉黛醉美东方唇膏口红正品 持久保湿滋润防水不掉色护唇彩妆" class="J_MakePoint" data-point="tbcart.8.12">
+                                <a href="{%url 'myhome_info' i.id %}" data-title="美康粉黛醉美东方唇膏口红正品 持久保湿滋润防水不掉色护唇彩妆" class="J_MakePoint" data-point="tbcart.8.12">
                                     <img src="{{i.pic}}" style="width:100%;height:100%" class="itempic J_ItemImg"></a>
                             </div>
                             <div class="item-info">
@@ -115,7 +115,7 @@
             <span>全选</span>
         </div>
         <div class="operations">
-            <a href="#" hidefocus="true" class="deleteAll">删除</a>
+            <a href="{%url 'myhome_clearcart'%}" hidefocus="true" class="deleteAll">删除</a>
             <!-- <a href="#" hidefocus="true" class="J_BatchFav">移入收藏夹</a> -->
         </div>
         <div class="float-bar-right">
@@ -162,8 +162,8 @@
                 num=parseInt(a.parents('.sl').find('.text_box').attr('value'));
                 price=parseFloat(a.parents('.item-content').find('.price-original').text());
                 // console.log(num,price)
-                $.get("{%url 'myhome_editcart'%}",{gid:gid,gnum:gnum},function(data){
-                    console.log(data)
+                $.get("{%url 'myhome_editcart'%}",{gid:gid,gnum:num},function(data){
+                    
                 })
                 a.parents('.item-content').find('.J_ItemSum').text(Math.floor(num*price*100)/100);
                 check(0);

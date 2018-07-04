@@ -57,7 +57,7 @@
                         <label for="user-weibo" class="am-u-sm-3 am-form-label">上传头像：</label>
                         <div class="am-u-sm-9">
                             <div class="tpl-form-file-img">
-                                <img src="{{ uinfo.pic }}" width="150">
+                                <img src="{{ uinfo.pic|default:'/static/pic/users.jpg' }}" width="150">
                             </div>
                             <br>
                             <div class="am-form-group am-form-file">

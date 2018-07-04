@@ -58,7 +58,7 @@
                                     </label>
                                     <div style="position: relative;">
                                         <input type="text" name="vcode" required  placeholder="请输入验证码">
-                                        <img src="{% url 'myhome_vcode' %}" onclick="this.src='/vcode?'+Math.random()" style="position: absolute;top:10px;right:10px">
+                                        <img src="{% url 'myhome_vcode' %}" onclick="this.src='{%url 'myhome_vcode'%}'+'?'+Math.random()" style="position: absolute;top:10px;right:10px">
                                     </div>
                                 </div>
                                 <div class="am-cf">

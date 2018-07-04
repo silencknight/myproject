@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import permission_required
 
 # Create your views here.
 
+# 订单列表
 @permission_required('myadmin.show_order',raise_exception=True)
 def list(request):
     data = Orders.objects.all()
@@ -16,6 +17,7 @@ def list(request):
     data = paginator.page(p)
     return render(request,'myadmin/order/list.html',{'olist':data})
 
+# 订单信息修改
 @permission_required('myadmin.edit_order',raise_exception=True)
 def edit(request):
     oid = request.GET['oid']
@@ -27,9 +29,6 @@ def edit(request):
             ob = Orders.objects.get(id=oid)
             data = request.POST.copy().dict()
             ob.status = data['status']
-            ob.uid = Users.objects.get(username=data['username'])
-            ob.tolprice = data['tolprice']
-            ob.tolnum = data['tolnum']
             # print(ob.status, ob.uid, ob.tolprice, ob.tolnum)
             ob.save()
             return HttpResponse('<script>alert("修改成功");location.href="'+reverse('myadmin_order_list')+'"</script>')

@@ -100,3 +100,12 @@ class OrderInfo(models.Model):
     orderid = models.ForeignKey(to="Orders",to_field="id")
     gid = models.ForeignKey(to="Goods",to_field="id")
     num = models.IntegerField()
+
+class Citys(models.Model):
+    # id name upid 
+    name = models.CharField(max_length=100)
+    upid = models.IntegerField()
+
+    # myhome_citys
+    class Meta():
+        db_table = 'citys'

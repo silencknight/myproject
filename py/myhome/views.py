@@ -1,31 +1,33 @@
 from django.shortcuts import render,reverse
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 
-from myadmin.models import Users,Types,Goods,Address,Orders,OrderInfo
+from myadmin.models import Users,Types,Goods,Address,Orders,OrderInfo,Citys
 
 from django.contrib.auth.hashers import make_password, check_password
 
 # Create your views here.
 
+# 首页
 def index(request):
     data = []
+    # 获取所有分类，上架商品
     ob = Types.objects.filter(pid = 0)
     for i in ob:
         i.typesub = Types.objects.filter(pid = i.id)
         for j in i.typesub:
-            j.goodssub = Goods.objects.filter(typeid=j.id)
+            j.goodssub = Goods.objects.filter(typeid=j.id).exclude(status=1)
             data.append(j)
             #  i.typesub.goodssub
-    # print(data)
     return render(request,'myhome/index.html',{'tlist':ob,'glist':data})
 
+# 登录
 def login(request):
     nest = request.GET.get('next','/')
     if request.method == 'GET':
         return render(request,'myhome/login.html')
     elif request.method == 'POST':
         if request.POST['vcode'].upper() != request.session['verifycode'].upper():
-            return HttpResponse('<script>alert("验证码错误");history.back(-1)</script>')
+            return HttpResponse('<script>alert("验证码错误");history.back(-1);</script>')
         try:
             ob = Users.objects.get(username=request.POST['username'])
             # 检测密码
@@ -36,13 +38,14 @@ def login(request):
                 return HttpResponse('<script>alert("登陆成功");location.href="'+nest+'"</script>')
         except:
             pass
-        return  HttpResponse('<script>alert("用户名或密码错误");history.back(-1)</script>')
+        return  HttpResponse('<script>alert("用户名或密码错误");history.back(-1);</script>')
 
+# 登出
 def logout(request):
     request.session['User']={}
     return HttpResponse('<script>alert("退出登录");location.href="/"</script>')
 
-
+# 注册
 def register(request):
     if request.method =='GET':
 
@@ -65,34 +68,32 @@ def register(request):
             pass
         return HttpResponse('<script>alert("注册失败");history.back(-1)</script>')
 
+# 列表
 def list(request):
     key=request.GET.get('keywords',None)
     if key:
-        data = Goods.objects.filter(title__contains=key)
+        data = Goods.objects.filter(title__contains=key).exclude(status=1)
     else:
-        data = Goods.objects.all()
+        data = Goods.objects.all().exclude(status=1)
     print(data)
     return render(request,'myhome/list.html',{'glist':data,'key':key})
 
+# 列表-分类查询
 def list_id(request,uid):
-    print(uid)
-    data = Goods.objects.filter(typeid=uid)
-    print(data)
+    data = Goods.objects.filter(typeid=uid).exclude(status=1)
     return render(request,'myhome/list.html',{'glist':data,'key':data[0].typeid.typename})
 
-# def search(request):
-#     keywords = request.GET['keywords']
-#     print(keywords)
-#     return render(request,'myhome/list.html')
-
+# 商品详情
 def info(request,gid):
     try:
-        data = Goods.objects.get(id=gid)
+        data = Goods.objects.get(id=gid,status=0)
         data.clicknum+=1
         data.save()
         return render(request,'myhome/info.html',{'ginfo':data})
     except:
         return HttpResponse("<script>history.back(-1)</script>")
+
+# 向购物车添加商品
 def addcart(request):
     try:
         count = request.session.get('count',0)
@@ -111,6 +112,7 @@ def addcart(request):
     except:
         return HttpResponse(0)
 
+# 删除购物车中的商品
 def delcart(request):
     try:
         cid = request.GET['cid']
@@ -122,12 +124,19 @@ def delcart(request):
     except:
         return HttpResponse(0)
 
+# 购物车页面
 def cart(request):
     data = request.session.get('cart',None)
     if data:
         data=request.session['cart'].values()
     return render(request,'myhome/cart.html',{'glist':data})
 
+def clearcart(request):
+    request.session['cart'] = {}
+    request.session['count'] = 0
+    return render(request,'myhome/cart.html')
+
+# 验证码
 def vcode(request):
     
     #引入绘图模块
@@ -175,14 +184,16 @@ def vcode(request):
     #将内存中的图片数据返回给客户端，MIME类型为图片png
     return HttpResponse(buf.getvalue(), 'image/png')
 
+# 修改购物车
 def editcart(request):
     gid = request.GET['gid']
     num = request.GET['gnum']
     data = request.session['cart']
-    data[gid]['gnum'] = int(num)
+    data[gid]['num'] = int(num)
     request.session['cart'] = data
     return HttpResponse(gid+num)
 
+# 订单检查页面
 def ordercheck(request):
     res = eval(request.GET['items'])
     data = {}
@@ -202,6 +213,7 @@ def ordercheck(request):
     addr = Address.objects.filter(uid=request.session['User']['uid'])
     return render(request,'myhome/ordercheck.html',{'addlist':addr,'data':data})
 
+# 添加地址
 def newaddress(request):
     try:
         data = eval(request.GET['data'])
@@ -216,6 +228,7 @@ def newaddress(request):
     except:
         return HttpResponse(0)
 
+# 修改地址
 def editaddr(request):
     if request.method=='GET':
         aid = int(request.GET['aid'])
@@ -231,12 +244,14 @@ def editaddr(request):
         print(request.POST)
     return HttpResponse(0)
 
+# 删除地址
 def deladdr(request):
     aid =request.GET['aid']
     ob = Address.objects.get(id=aid)
     ob.delete()
     return HttpResponse(1)
 
+# 创建订单
 def createorder(request):
     aid = request.POST['addrid']
     uid = request.session['User']['uid']
@@ -264,20 +279,22 @@ def createorder(request):
 
     return HttpResponse('<script>location.href="/pay/?orderid='+str(ob.id)+'"</script>')
 
+# 付款成功页面
 def pay(request):
     orderid = request.GET['orderid']
     data = Orders.objects.get(id=orderid)
     return render(request,'myhome/pay.html',{'order':data})
 
+# 个人中心
 def mycenter(request):
     return render(request,'myhome/center/index.html') 
 
+# 我的订单
 def myorders(request):
     data = Orders.objects.filter(uid=request.session['User']['uid']).exclude(status=-1)
+    return render(request,'myhome/center/myorders.html',{'orderlist':data}) 
 
-    context = {'orderlist':data}
-    return render(request,'myhome/center/myorders.html',context) 
-
+# 删除订单
 def delorder(request):
     oid = request.GET['oid']
     data = Orders.objects.get(id = oid)
@@ -286,9 +303,13 @@ def delorder(request):
     data.save()
     return HttpResponse('删除成功')
 
+# 个人信息
 def myinfo(request):
-    return render(request,'myhome/center/info.html',{})
+    id = request.session['User']['uid']
+    ob = Users.objects.get(id = id)
+    return render(request,'myhome/center/info.html',{'user':ob})
 
+# session测试
 def set(request):
     request.session['abc'] ='aabbcc'
     request.session['def'] ='ddeeff'

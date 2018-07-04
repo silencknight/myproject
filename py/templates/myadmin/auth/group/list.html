@@ -59,6 +59,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>管理组名</th>
+                                    <th>人数</th>
                                     <th>操作</th>
                                 </tr>
                             </thead>
@@ -67,6 +68,7 @@
                                 <tr>
                                     <td class="am-text-middle">{{ i.id }}</td>
                                     <td class="am-text-middle">{{ i.name }}</td>
+                                    <td class="am-text-middle">{{ i.count }}</td>
                                     <td class="am-text-middle">
                                         <div class="tpl-table-black-operation">
                                             <a href="{% url 'auth_group_edit'%}?id={{i.id}}">
@@ -82,6 +84,14 @@
                                 <!-- more data -->
                             </tbody>
                         </table>
+                    </div>
+                </div>
+                <div class="am-u-lg-12 am-cf">
+                    <div class="am-fr">
+                        <ul class="am-pagination tpl-pagination">
+                            {% load page %}
+                            {% Page group.paginator.num_pages request %}
+                        </ul>
                     </div>
                 </div>
             </div>

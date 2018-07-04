@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import permission_required
 
 from .. models import Types,Goods
 
+# 添加分类
 @permission_required('myadmin.insert_types',raise_exception=True)
 def add(request):
     if request.method == 'GET':
@@ -32,6 +33,7 @@ def add(request):
         except:
             return HttpResponse('<script>alert("添加失败");location.href="'+reverse("myadmin_type_add")+'?typename='+request.POST['typename']+'"</script>')
 
+# 分类列表
 @permission_required('myadmin.show_types',raise_exception=True)
 def list(request):
     types=request.GET.get('type',None)
@@ -64,6 +66,7 @@ def list(request):
     # print(paginator.num_pages)
     return render(request,'myadmin/type/list.html',{'typelist':ob})
 
+# 修改分类信息
 @permission_required('myadmin.edit_types',raise_exception=True)
 def edit(request):
     ob = Types.objects.get(id=request.GET['tid'])
@@ -77,6 +80,7 @@ def edit(request):
         except:
             return HttpResponse('<script>alert("修改失败");location.href="'+reverse('myadmin_type_edit')+'?tid='+str(request.GET['tid'])+'"</script>')
 
+# 删除分类
 @permission_required('myadmin.del_types',raise_exception=True)
 def delete(request):
     id = request.GET['id']

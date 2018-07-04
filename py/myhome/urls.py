@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^cart/$', views.cart,name='myhome_cart'),
     url(r'^ordercheck/$', views.ordercheck,name='myhome_ordercheck'),
     url(r'^editcart/$', views.editcart,name='myhome_editcart'),
+    url(r'^clearcart/$', views.clearcart,name='myhome_clearcart'),
     url(r'^editaddr/$', views.editaddr,name='myhome_editaddr'),
     url(r'^deladdr/$', views.deladdr,name='myhome_deladdr'),
     url(r'^newaddress/$', views.newaddress,name='myhome_newaddress'),

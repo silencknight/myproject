@@ -10,6 +10,7 @@ import os
 
 # Create your views here.
 
+# 商品添加
 @permission_required('myadmin.insert_goods',raise_exception=True)
 def add(request):
     if request.method=='GET':
@@ -36,6 +37,7 @@ def add(request):
         except:
             return HttpResponse('<script>alert("添加失败");location.href="'+reverse('myadmin_goods_add')+'"</script>')
 
+# 商品列表
 @permission_required('myadmin.show_goods',raise_exception=True)
 def list(request):
     types = request.GET.get('type',None)
@@ -71,6 +73,7 @@ def list(request):
     ob = paginator.page(p)
     return render(request,'myadmin/goods/list.html',{'goodslist':ob})
 
+# 商品信息修改
 @permission_required('myadmin.insert_edit',raise_exception=True)
 def edit(request):
     id = request.GET['gid']
@@ -101,6 +104,7 @@ def edit(request):
         except:
             return HttpResponse('<script>alert("修改失败");location.href="'+reverse("myadmin_goods_edit")+'?gid='+str(gb.id)+'&tid='+request.GET['tid']+'"</script>')
 
+# 商品下架
 @permission_required('myadmin.del_goods',raise_exception=True)
 def delete(request):
     try:
